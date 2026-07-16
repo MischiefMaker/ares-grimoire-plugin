@@ -1,0 +1,31 @@
+<div class="container grimoire-page">
+  <h2>Grimoire</h2>
+
+  <h3>Learned Spells</h3>
+  {{#each model.learned as |spell|}}
+    <div class="grimoire-spell">
+      <h4>{{spell.name}}</h4>
+      <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+      {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
+    </div>
+  {{else}}
+    <p>You have not learned any spells.</p>
+  {{/each}}
+
+  <h3>Available Spells</h3>
+  {{#each model.available as |spell|}}
+    <div class="grimoire-spell">
+      <h4>{{spell.name}}</h4>
+      <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+      {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
+      <p>Cost: {{spell.cost}} XP (You have {{spell.current_xp}} XP, Skill: {{spell.current_skill}})</p>
+      {{#if spell.can_learn}}
+        <button class="btn btn-primary" {{action "learn" spell}}>Learn ({{spell.cost}} XP)</button>
+      {{else}}
+        <p class="text-danger">Cannot learn: insufficient skill or XP.</p>
+      {{/if}}
+    </div>
+  {{else}}
+    <p>No spells available to learn.</p>
+  {{/each}}
+</div>

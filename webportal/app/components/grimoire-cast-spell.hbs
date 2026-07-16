@@ -1,0 +1,22 @@
+<div class="grimoire-cast-spell">
+  {{#if loading}}
+    <p>Loading spells...</p>
+  {{else if spells.length}}
+    <div class="list-group">
+      {{#each spells as |spell|}}
+        <a href="#" class="list-group-item {{if (eq selectedSpell spell) 'active'}}" {{action "selectSpell" spell}}>
+          <h4>{{spell.name}}</h4>
+          <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+          {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
+        </a>
+      {{/each}}
+    </div>
+    {{#if selectedSpell}}
+      <button class="btn btn-primary" disabled={{casting}} {{action "castSpell"}}>
+        {{#if casting}}Casting...{{else}}Cast {{selectedSpell.name}}{{/if}}
+      </button>
+    {{/if}}
+  {{else}}
+    <p>You have no spells available to cast.</p>
+  {{/if}}
+</div>

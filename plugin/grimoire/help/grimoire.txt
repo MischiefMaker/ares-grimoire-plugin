@@ -1,0 +1,15 @@
++grimoire
++grimoire <branch>
++grimoire <spell id>
++grimoire/learn <spell id>
++grimoire/cast <spell id>
++grimoire/propose <branch>=<name>/<min skill>/<difficulty>/<description>
+
+The Grimoire is the repository of all known spells. You can browse spells, learn them, cast them, and propose new ones.
+
++grimoire - Lists all spells grouped by branch. Spells you have learned are tagged as Learned, spells you have the skill for are Available, and spells you lack the skill for are Locked.
++grimoire <branch> - Lists spells in a specific branch.
++grimoire <spell id> - Shows details for a specific spell.
++grimoire/learn <spell id> - Learns a spell. You must meet the minimum skill requirement and have enough XP. The XP cost is based on the spell's minimum skill rating.
++grimoire/cast <spell id> - Casts a spell you have learned. The system rolls your branch skill plus your Magic ability rating minus the spell difficulty using the FS3 rolling system.
++grimoire/propose <branch>=<name>/<min skill>/<difficulty>/<description> - Proposes a new spell to staff via the Jobs system. Staff will approve or reject the proposal.

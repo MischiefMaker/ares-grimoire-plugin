@@ -1,0 +1,25 @@
+<div class="grimoire-learn-spell">
+  {{#if loading}}
+    <p>Loading spells...</p>
+  {{else if spells.length}}
+    <div class="list-group">
+      {{#each spells as |spell|}}
+        <div class="list-group-item">
+          <h4>{{spell.name}}</h4>
+          <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+          {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
+          <p>Cost: {{spell.cost}} XP (You have {{spell.current_xp}} XP, Skill: {{spell.current_skill}})</p>
+          {{#if spell.can_learn}}
+            <button class="btn btn-primary" disabled={{learning}} {{action "learnSpell" spell}}>
+              {{#if learning}}Learning...{{else}}Learn{{/if}}
+            </button>
+          {{else}}
+            <p class="text-danger">Cannot learn this spell.</p>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p>No spells available to learn.</p>
+  {{/if}}
+</div>

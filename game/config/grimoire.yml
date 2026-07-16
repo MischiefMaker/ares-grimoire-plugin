@@ -1,0 +1,24 @@
+---
+grimoire:
+  shortcuts:
+    "grimoire": "grimoire"
+
+  branches:
+    ceremonial:
+      name: "Ceremonial Magic"
+      fs3_skill: "Ceremonial Magic"
+    hedge:
+      name: "Hedgecraft"
+      fs3_skill: "Hedgecraft"
+    forbidden:
+      name: "Forbidden Magic"
+      fs3_skill: "Forbidden Magic"
+
+  jobs:
+    spell_proposal_category: "Requests"
+
+  casting:
+    show_roll_details: true
+
+  learning:
+    xp_cost_per_skill_point: 1

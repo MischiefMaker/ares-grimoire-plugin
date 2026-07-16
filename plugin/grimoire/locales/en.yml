@@ -1,0 +1,54 @@
+---
+en:
+  grimoire:
+    title: "Grimoire"
+    no_spells: "No spells recorded."
+    branch_label: "Branch"
+    min: "Min"
+    diff: "Diff"
+    description: "Description"
+    branch_not_found: "No branch named '%{branch}'."
+    spell_not_found: "No spell found with id %{id}."
+    spell_not_approved: "That spell is not approved for casting."
+    cast_announce: "%{caster} casts %{spell} (%{branch}). %{status}"
+    success: "Success"
+    failure: "Failure"
+    roll_details: "[Roll: %{details}]"
+    insufficient_skill: "You do not meet the minimum skill (%{min}) to cast %{name}."
+    staff_only: "That command is restricted to staff."
+    spell_added: "Spell '%{name}' added to the Grimoire."
+    spell_edited: "Spell #%{id} updated."
+    spell_deleted: "Spell #%{id} deleted."
+    spell_invalid: "Could not save spell: %{errors}"
+    proposal_title: "Spell Proposal: %{name}"
+    proposal_body: |
+      %{submitter} has proposed a new spell.
+      Branch: %{branch}
+      Name: %{name}
+      Minimum Skill: %{min}
+      Difficulty: %{diff}
+      Description: %{desc}
+    proposal_submitted: "Spell proposal submitted as job #%{job}."
+    proposal_failed: "Could not submit spell proposal."
+    job_not_found: "No job found with id %{id}."
+    not_a_proposal: "Job #%{id} is not a Grimoire spell proposal."
+    spell_already_exists: "A spell named '%{name}' already exists."
+    approved_comment: "Spell '%{name}' approved by %{staff}."
+    rejected_comment: "Spell proposal rejected by %{staff}. Reason: %{reason}"
+    proposal_approved: "Spell '%{name}' approved and created. Job #%{job} closed."
+    proposal_rejected: "Spell proposal rejected. Job #%{job} closed."
+    unknown_switch: "Unknown grimoire command: %{switch}"
+    learned_spells: "Learned Spells"
+    available_spells: "Available Spells"
+    none_learned: "You have not learned any spells."
+    tag_learned: "Learned"
+    tag_available: "Available"
+    tag_locked: "Locked"
+    learned_status: "Learned"
+    yes: "Yes"
+    no: "No"
+    already_learned: "You have already learned %{name}."
+    insufficient_skill_to_learn: "You need a minimum skill rating of %{min} to learn %{name}. (Current: %{current})"
+    insufficient_xp: "You need %{cost} XP to learn %{name}. (Current: %{current})"
+    spell_learned: "You have learned %{name} for %{cost} XP."
+    not_learned: "You have not learned this spell."

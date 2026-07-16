@@ -1,0 +1,21 @@
++grimoire/add <branch>=<name>/<min skill>/<difficulty>/<description>
++grimoire/edit <id>=<name>/<min skill>/<difficulty>/<description>
++grimoire/delete <id>
++grimoire/approve <job id>
++grimoire/reject <job id>=<reason>
+
+Staff commands for managing the Grimoire. These require admin access or the 'manage_grimoire' permission.
+
++grimoire/add creates a new approved spell immediately. The spell is added to the Grimoire and available for casting right away.
+
++grimoire/edit updates an existing spell. You cannot change a spell's branch. All four fields (name, min skill, difficulty, description) must be provided.
+
++grimoire/delete permanently removes a spell from the Grimoire. This also removes any learned spell records associated with it.
+
++grimoire/approve <job id> approves a spell proposal. The spell is created and marked approved, and the Job is closed with an approval comment. If the spell already exists or the proposal was already processed, the command will fail.
+
++grimoire/reject <job id>=<reason> rejects a spell proposal. The Job is closed with the rejection reason. No spell is created.
+
+Spell proposals are submitted by players with +grimoire/propose, which creates a standard Ares Job. The Job is the source of truth for proposal status.
+
+See also: +grimoire
