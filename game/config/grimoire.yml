@@ -3,6 +3,9 @@ grimoire:
   shortcuts:
     "grimoire": "grimoire"
 
+  permissions:
+    manage: manage_grimoire
+
   branches:
     ceremonial:
       name: "Ceremonial Magic"

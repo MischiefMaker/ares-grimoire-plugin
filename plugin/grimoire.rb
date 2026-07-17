@@ -135,5 +135,9 @@ module AresMUSH
       end
       nil
     end
+
+    def self.manage_permission
+      Global.read_config('grimoire', 'permissions')&.dig('manage') || 'manage_grimoire'
+    end
   end
 end

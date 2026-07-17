@@ -6,6 +6,12 @@ module AresMUSH
 
       MAGIC_ABILITY = "Magic"
 
+      # --- Permissions ---
+      def self.can_manage?(character)
+        return false unless character
+        character.is_admin? || character.has_permission?(Grimoire.manage_permission)
+      end
+
       # --- Queries ---
       def self.list_spells
         Spell.all.to_a.select { |s| s.approved }.sort_by { |s| s.name.downcase }

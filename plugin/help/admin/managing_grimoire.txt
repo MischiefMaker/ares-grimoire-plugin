@@ -4,7 +4,15 @@
 +grimoire/approve <job id>
 +grimoire/reject <job id>=<reason>
 
-Staff commands for managing the Grimoire. These require admin access or the 'manage_grimoire' permission.
+Staff commands for managing the Grimoire. These require admin access or the configured management permission.
+
+PERMISSION CONFIGURATION
+By default, these commands require the 'manage_grimoire' permission. You can change this to use any existing permission in your game's config/grimoire.yml:
+
+  permissions:
+    manage: manage_apps
+
+This allows reuse of existing permissions (manage_apps, manage_jobs, etc.) without plugin modification.
 
 ADDING SPELLS
 +grimoire/add creates a new approved spell immediately. The spell is added to the Grimoire and available for casting right away. This bypasses the proposal workflow.

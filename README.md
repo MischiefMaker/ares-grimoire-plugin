@@ -19,69 +19,31 @@ A magic system plugin for AresMUSH with spell learning, FS3-based casting, and w
 1. In your game shell, run: `plugin/install https://github.com/YOURNAME/ares-grimoire-plugin`
 2. Restart the game.
 
-## Repository Structure
-
-```
-ares-grimoire-plugin/
-    README.md
-    plugin/
-        grimoire/
-            grimoire.rb
-            commands/
-                grimoire_list_cmd.rb
-                grimoire_learn_cmd.rb
-                grimoire_cast_cmd.rb
-                grimoire_propose_cmd.rb
-                grimoire_add_cmd.rb
-                grimoire_edit_cmd.rb
-                grimoire_delete_cmd.rb
-                grimoire_approve_cmd.rb
-                grimoire_reject_cmd.rb
-            help/
-                grimoire.txt
-                admin/
-                    managing_grimoire.txt
-            locales/
-                en.yml
-            models/
-                spell.rb
-                spell_proposal.rb
-                character_spell_learned.rb
-            public/
-                grimoire_api.rb
-            services/
-                grimoire_service.rb
-            web/
-                grimoire_page_request_handler.rb
-                grimoire_spells_request_handler.rb
-                grimoire_available_request_handler.rb
-                grimoire_learned_request_handler.rb
-                grimoire_learn_request_handler.rb
-                grimoire_cast_request_handler.rb
-    game/
-        config/
-            grimoire.yml
-    webportal/
-        app/
-            components/
-                grimoire-cast-spell.hbs
-                grimoire-cast-spell.js
-                grimoire-learn-spell.hbs
-                grimoire-learn-spell.js
-            routes/
-                grimoire.js
-            templates/
-                grimoire.hbs
-```
-
 ## Configuration
 
 Configuration is in `game/config/grimoire.yml`:
 
+- **permissions** - Staff permission name (default: `manage_grimoire`)
 - **branches** - Magic branches with display names and FS3 skill mappings
 - **jobs** - Spell proposal category (defaults to the Jobs request_category)
 - **casting** - Roll detail visibility
 - **learning** - XP cost per skill point
+
+### Permissions
+
+By default, staff commands require the `manage_grimoire` permission. You can change this to use an existing permission in your game:
+
+```yaml
+permissions:
+  manage: manage_apps
+```
+
+This lets you reuse existing permissions (e.g., `manage_apps`, `manage_jobs`) without plugin modifications. The configured permission is used for all staff-only features:
+- Adding, editing, and deleting spells
+- Approving and rejecting spell proposals
+- Web portal staff management interfaces
+
+To grant non-admins access, add the permission to the appropriate roles in your game's permissions configuration.
 
 ### Branches
 
@@ -116,7 +78,7 @@ Ensure your FS3 config includes:
 - `+grimoire/approve <job id>` - Approve a spell proposal
 - `+grimoire/reject <job id>=<reason>` - Reject a spell proposal
 
-Staff commands require admin access or the 'manage_grimoire' permission.
+Staff commands require admin access or the configured management permission (default: 'manage_grimoire').
 
 ## Spell Proposal Workflow
 

@@ -10,7 +10,7 @@ module AresMUSH
         return error if error
 
         # Check staff permission
-        unless enactor.is_admin? || enactor.has_permission?('manage_grimoire')
+        unless GrimoireService.can_manage?(enactor)
           return { error: "Insufficient permissions." }
         end
 

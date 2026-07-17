@@ -23,7 +23,7 @@ module AresMUSH
       end
 
       def check_can_manage
-        return t('grimoire.staff_only') unless staff?
+        return t('grimoire.staff_only') unless GrimoireService.can_manage?(enactor)
         nil
       end
 
@@ -39,11 +39,6 @@ module AresMUSH
         else
           client.emit_failure t('grimoire.spell_invalid', errors: result[:errors].join(', '))
         end
-      end
-
-      def staff?
-        return false unless enactor
-        enactor.is_admin? || enactor.has_permission?('manage_grimoire')
       end
     end
   end
