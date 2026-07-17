@@ -68,5 +68,18 @@ export default Route.extend({
         this.get('flashMessages').danger('Failed to load Grimoire. Please try again later.');
         return { learned: [], available: [] };
       });
+  },
+
+  setupController(controller, model) {
+    this._super(controller, model);
+    // Convert branches object to array for dropdown
+    // This would normally come from the API, but branches are in config
+    // For now, we'll get them from the grimoire component by exposing the configuration
+    // The component has the branches available via inline data or we can fetch them
+    controller.set('branches', [
+      { key: 'ceremonial', name: 'Ceremonial Magic' },
+      { key: 'hedge', name: 'Hedgecraft' },
+      { key: 'forbidden', name: 'Forbidden Magic' }
+    ]);
   }
 });

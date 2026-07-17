@@ -8,6 +8,9 @@
     <li class="nav-item">
       <a class="nav-link" href="#available" data-toggle="tab" role="tab">Available Spells</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#propose" data-toggle="tab" role="tab">Propose Spell</a>
+    </li>
   </ul>
 
   <div class="tab-content">
@@ -52,6 +55,10 @@
       {{else}}
         <p class="text-muted">No spells available to learn. You have learned everything!</p>
       {{/if}}
+    </div>
+
+    <div class="tab-pane" id="propose" role="tabpanel">
+      {{grimoire-propose-spell branches=branches}}
     </div>
   </div>
 </div>

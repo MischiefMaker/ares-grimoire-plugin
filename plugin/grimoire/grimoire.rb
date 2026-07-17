@@ -21,6 +21,7 @@ require_relative 'web/grimoire_available_request_handler'
 require_relative 'web/grimoire_learned_request_handler'
 require_relative 'web/grimoire_learn_request_handler'
 require_relative 'web/grimoire_cast_request_handler'
+require_relative 'web/grimoire_propose_request_handler'
 
 module AresMUSH
   module Grimoire
@@ -76,6 +77,8 @@ module AresMUSH
         return GrimoireLearnRequestHandler
       when "grimoireCast"
         return GrimoireCastRequestHandler
+      when "grimoirePropose"
+        return GrimoireProposalRequestHandler
       end
       nil
     end
