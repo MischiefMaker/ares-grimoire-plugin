@@ -48,10 +48,23 @@ To grant non-admins access, add the permission to the appropriate roles in your 
 ### Branches
 
 Each branch must specify:
-- `name` - Display name shown to players
-- `fs3_skill` - The FS3 action skill used for casting and learning
+- `name` - Display name shown to players (e.g., "Ceremonial Magic")
+- `skill` - The skill used for casting and learning (e.g., "Ceremonial Magic")
 
-Branches are stored as configurable keys (e.g., `ceremonial`), not display names.
+Branches are stored as configurable keys (e.g., `ceremonial`), not display names. The key is stable; the name and skill can be customized.
+
+Example:
+```yaml
+branches:
+  ceremonial:
+    name: "Ceremonial Magic"
+    skill: "Ceremonial Magic"
+  hedge:
+    name: "Hedgecraft"
+    skill: "Herbalism"
+```
+
+**Note**: The `skill` field is system-agnostic. In FS3, it maps to an action skill. Future systems (SOUL, custom) can use the same configuration structure.
 
 ### FS3 Setup
 
@@ -169,12 +182,15 @@ Then in your scene-play-menu.js component, handle the modal opening.
 ### Web Portal API
 
 The web portal components use the AresMUSH GameApi service with these request commands:
+- `grimoireBranches` - Fetch configured branches (returns branch keys and display names)
 - `grimoirePage` - Fetch learned and available spells for the Grimoire page
 - `grimoireSpells` - Fetch castable (learned) spells
 - `grimoireAvailable` - Fetch available spells to learn
 - `grimoireLearned` - Fetch learned spells
 - `grimoireLearn` - Learn a spell (args: spell_id)
 - `grimoireCast` - Cast a spell (args: spell_id, scene_id)
+
+**Note**: Branches are fetched from the server configuration (`grimoireBranches` endpoint), not hardcoded in the web UI. Adding or removing branches in `game/config/grimoire.yml` automatically updates all web forms.
 
 ## Permissions
 
