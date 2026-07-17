@@ -29,6 +29,7 @@ require_relative 'web/grimoire_approve_request_handler'
 require_relative 'web/grimoire_reject_request_handler'
 require_relative 'web/grimoire_all_spells_request_handler'
 require_relative 'web/grimoire_proposals_request_handler'
+require_relative 'web/grimoire_branches_request_handler'
 
 module AresMUSH
   module Grimoire
@@ -100,6 +101,8 @@ module AresMUSH
         return GrimoireAllSpellsRequestHandler
       when "grimoireProposals"
         return GrimoireProposalsRequestHandler
+      when "grimoireBranches"
+        return GrimoireBranchesRequestHandler
       end
       nil
     end
@@ -109,7 +112,7 @@ module AresMUSH
       return "Grimoire: No branches configured." if branches.empty?
       branches.each do |key, info|
         return "Grimoire: Branch '#{key}' missing name." unless info['name']
-        return "Grimoire: Branch '#{key}' missing fs3_skill." unless info['fs3_skill']
+        return "Grimoire: Branch '#{key}' missing skill." unless info['skill']
       end
       nil
     end
@@ -125,7 +128,7 @@ module AresMUSH
 
     def self.branch_skill(key)
       info = branches[key.to_s]
-      info && info['fs3_skill'] ? info['fs3_skill'] : nil
+      info && info['skill'] ? info['skill'] : nil
     end
 
     def self.resolve_branch(name)

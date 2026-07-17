@@ -323,12 +323,70 @@ end
 - Should difficulty have min/max constraints?
   - **Answer**: Configurable limits, not hardcoded
 
-## 8. Phase 2B Acceptance Criteria
+## 8. Branch Configuration Update (Implemented)
+
+### Changes Made
+
+The configuration now uses generic `skill` field instead of FS3-specific `fs3_skill`:
+
+**Before**:
+```yaml
+branches:
+  ceremonial:
+    name: "Ceremonial Magic"
+    fs3_skill: "Ceremonial Magic"
+```
+
+**After**:
+```yaml
+branches:
+  ceremonial:
+    name: "Ceremonial Magic"
+    skill: "Ceremonial Magic"
+```
+
+### Implementation
+
+1. **Updated grimoire.yml**: Changed all `fs3_skill` to `skill`
+2. **Updated grimoire.rb helpers**:
+   - `branch_skill()` now reads `skill` instead of `fs3_skill`
+   - `check_config()` validates `skill` instead of `fs3_skill`
+3. **Added grimoireBranches endpoint**: Returns configured branches from server
+4. **Updated web route**: Fetches branches from server instead of hardcoding
+5. **Components receive branches**: All forms now receive branches from route model
+
+### Benefits
+
+- Branch configuration is system-agnostic (uses `skill` instead of `fs3_skill`)
+- Web UI is data-driven (branches come from server YAML, not hardcoded in JavaScript)
+- Easy to add new branches or remove old ones in YAML
+- Web UI automatically reflects configuration changes
+- Foundation for future multi-skill-system support
+
+### Future Extensibility
+
+When adding SOUL support, configuration could evolve to:
+
+```yaml
+branches:
+  ceremonial:
+    name: "Ceremonial Magic"
+    skill: "Ceremonial Magic"        # Primary skill (system-agnostic)
+    fs3_skill: "Ceremonial Magic"    # FS3-specific (optional)
+    soul_skill: "Wizardry"           # SOUL-specific (optional)
+```
+
+The backend could select the appropriate skill based on configured system.
+
+## 9. Phase 2B Acceptance Criteria
 
 After Phase 2B staff web UI is complete:
 
+- [x] Configuration uses generic `skill` field (not `fs3_skill`)
+- [x] Branches are fetched from server (not hardcoded in route)
+- [x] grimoireBranches endpoint returns configured branches
+- [x] Web route fetches branches on load and stores in model
 - [ ] All staff forms use generic labels (not FS3-specific)
-- [ ] Branches are fetched from server (not hardcoded in route)
 - [ ] Staff can add/edit/delete spells with branch, name, min_skill, difficulty, description
 - [ ] Validation errors are clear and system-agnostic
 - [ ] Future systems could add config option for system type without code changes

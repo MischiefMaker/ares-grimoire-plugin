@@ -9,13 +9,13 @@ grimoire:
   branches:
     ceremonial:
       name: "Ceremonial Magic"
-      fs3_skill: "Ceremonial Magic"
+      skill: "Ceremonial Magic"
     hedge:
       name: "Hedgecraft"
-      fs3_skill: "Hedgecraft"
+      skill: "Hedgecraft"
     forbidden:
       name: "Forbidden Magic"
-      fs3_skill: "Forbidden Magic"
+      skill: "Forbidden Magic"
 
   jobs:
     spell_proposal_category: "Requests"

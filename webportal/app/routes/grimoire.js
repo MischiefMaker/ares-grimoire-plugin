@@ -106,15 +106,21 @@ export default Route.extend({
     let pageModel = model[0];
     this._super(controller, pageModel);
 
-    // Set up branches
-    controller.set('branches', [
-      { key: 'ceremonial', name: 'Ceremonial Magic' },
-      { key: 'hedge', name: 'Hedgecraft' },
-      { key: 'forbidden', name: 'Forbidden Magic' }
-    ]);
+    let api = this.get('gameApi');
+
+    // Fetch branches from server
+    api.requestOne('grimoireBranches')
+      .then((response) => {
+        if (response.branches) {
+          controller.set('branches', response.branches);
+        }
+      })
+      .catch((error) => {
+        this.get('flashMessages').danger('Failed to load branches.');
+        controller.set('branches', []);
+      });
 
     // Load staff data if user has permission
-    let api = this.get('gameApi');
     api.requestOne('grimoireAllSpells')
       .then((response) => {
         if (response.spells) {
