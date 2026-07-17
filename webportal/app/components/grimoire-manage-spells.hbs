@@ -1,0 +1,88 @@
+<div class="grimoire-manage-spells">
+  <h4>Manage Spells</h4>
+
+  <button class="btn btn-primary mb-3" {{action "toggleAddForm"}} disabled={{isSubmitting}}>
+    {{#if showAddForm}}Cancel{{else}}+ Add Spell{{/if}}
+  </button>
+
+  {{#if showAddForm}}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{#if editingSpell}}Edit Spell{{else}}Add New Spell{{/if}}</h5>
+
+        <div class="form-group">
+          <label for="spell-branch">Branch *</label>
+          <select id="spell-branch" class="form-control" disabled={{editingSpell}} value={{formBranch}} onchange={{action (mut formBranch) value="target.value"}}>
+            <option value="">-- Select a branch --</option>
+            {{#each branches as |branch|}}
+              <option value={{branch.key}}>{{branch.name}}</option>
+            {{/each}}
+          </select>
+          {{#if editingSpell}}
+            <small class="form-text text-muted">Branch cannot be changed for existing spells.</small>
+          {{/if}}
+        </div>
+
+        <div class="form-group">
+          <label for="spell-name">Name *</label>
+          <input type="text" id="spell-name" class="form-control" value={{formName}} onchange={{action (mut formName) value="target.value"}}>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="spell-min-skill">Min Skill *</label>
+            <input type="number" id="spell-min-skill" class="form-control" min="0" value={{formMinSkill}} onchange={{action (mut formMinSkill) value="target.value"}}>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="spell-difficulty">Difficulty *</label>
+            <input type="number" id="spell-difficulty" class="form-control" min="0" value={{formDifficulty}} onchange={{action (mut formDifficulty) value="target.value"}}>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="spell-description">Description *</label>
+          <textarea id="spell-description" class="form-control" rows="3" value={{formDescription}} onchange={{action (mut formDescription) value="target.value"}}></textarea>
+        </div>
+
+        <button class="btn btn-success" {{action "saveSpell"}} disabled={{isSubmitting}}>
+          {{#if isSubmitting}}Saving...{{else}}Save{{/if}}
+        </button>
+        {{#if editingSpell}}
+          <button class="btn btn-secondary" {{action "cancelEdit"}} disabled={{isSubmitting}}>Cancel Edit</button>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Branch</th>
+        <th>Min</th>
+        <th>Diff</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each allSpells as |spell|}}
+        <tr>
+          <td><strong>{{spell.name}}</strong></td>
+          <td>{{spell.branch}}</td>
+          <td>{{spell.minimum_skill}}</td>
+          <td>{{spell.difficulty}}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" {{action "editSpell" spell}} disabled={{isSubmitting}}>Edit</button>
+            <button class="btn btn-sm btn-danger" {{action "deleteSpell" spell}} disabled={{isSubmitting}}>Delete</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{#if allSpells.length}}
+    <p class="text-muted small">Total: {{allSpells.length}} spells</p>
+  {{else}}
+    <p class="text-muted">No spells found.</p>
+  {{/if}}
+</div>

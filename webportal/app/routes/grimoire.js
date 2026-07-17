@@ -7,6 +7,10 @@ const GrimoireController = Controller.extend({
   flashMessages: service(),
   isLearning: false,
   isCasting: false,
+  isStaff: false,
+  allSpells: [],
+  proposals: [],
+  branches: [],
 
   actions: {
     learnSpell(spell) {
@@ -52,6 +56,32 @@ const GrimoireController = Controller.extend({
 
     refreshGrimoire() {
       this.get('target').refresh();
+    },
+
+    refreshStaffSpells() {
+      let api = this.get('gameApi');
+      api.requestOne('grimoireAllSpells')
+        .then((response) => {
+          if (response.spells) {
+            this.set('allSpells', response.spells);
+          }
+        })
+        .catch((error) => {
+          this.get('flashMessages').danger('Failed to refresh spell list.');
+        });
+    },
+
+    refreshStaffProposals() {
+      let api = this.get('gameApi');
+      api.requestOne('grimoireProposals')
+        .then((response) => {
+          if (response.proposals) {
+            this.set('proposals', response.proposals);
+          }
+        })
+        .catch((error) => {
+          this.get('flashMessages').danger('Failed to refresh proposal list.');
+        });
     }
   }
 });
@@ -63,23 +93,50 @@ export default Route.extend({
 
   model: function() {
     let api = this.get('gameApi');
-    return api.requestOne('grimoirePage')
-      .catch((error) => {
-        this.get('flashMessages').danger('Failed to load Grimoire. Please try again later.');
-        return { learned: [], available: [] };
-      });
+    return Promise.all([
+      api.requestOne('grimoirePage')
+        .catch((error) => {
+          this.get('flashMessages').danger('Failed to load Grimoire. Please try again later.');
+          return { learned: [], available: [] };
+        })
+    ]);
   },
 
   setupController(controller, model) {
-    this._super(controller, model);
-    // Convert branches object to array for dropdown
-    // This would normally come from the API, but branches are in config
-    // For now, we'll get them from the grimoire component by exposing the configuration
-    // The component has the branches available via inline data or we can fetch them
+    let pageModel = model[0];
+    this._super(controller, pageModel);
+
+    // Set up branches
     controller.set('branches', [
       { key: 'ceremonial', name: 'Ceremonial Magic' },
       { key: 'hedge', name: 'Hedgecraft' },
       { key: 'forbidden', name: 'Forbidden Magic' }
     ]);
+
+    // Load staff data if user has permission
+    let api = this.get('gameApi');
+    api.requestOne('grimoireAllSpells')
+      .then((response) => {
+        if (response.spells) {
+          controller.set('allSpells', response.spells);
+          controller.set('isStaff', true);
+        }
+      })
+      .catch((error) => {
+        // User doesn't have staff permission or there was an error
+        controller.set('isStaff', false);
+      });
+
+    api.requestOne('grimoireProposals')
+      .then((response) => {
+        if (response.proposals) {
+          controller.set('proposals', response.proposals);
+          controller.set('isStaff', true);
+        }
+      })
+      .catch((error) => {
+        // User doesn't have staff permission or there was an error
+        controller.set('isStaff', false);
+      });
   }
 });

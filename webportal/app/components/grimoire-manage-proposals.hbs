@@ -1,0 +1,59 @@
+<div class="grimoire-manage-proposals">
+  <h4>Review Spell Proposals</h4>
+
+  {{#if showRejectForm}}
+    <div class="card mb-3 border-danger">
+      <div class="card-body">
+        <h5 class="card-title text-danger">Reject Proposal: {{rejectingProposal.name}}</h5>
+
+        <div class="form-group">
+          <label for="reject-reason">Rejection Reason *</label>
+          <textarea id="reject-reason" class="form-control" rows="3" placeholder="Tell the player why you're rejecting this proposal" value={{rejectReason}} onchange={{action (mut rejectReason) value="target.value"}}></textarea>
+        </div>
+
+        <button class="btn btn-danger" {{action "submitReject"}} disabled={{isSubmitting}}>
+          {{#if isSubmitting}}Rejecting...{{else}}Confirm Rejection{{/if}}
+        </button>
+        <button class="btn btn-secondary" {{action "cancelReject"}} disabled={{isSubmitting}}>Cancel</button>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if proposals.length}}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Job</th>
+          <th>From</th>
+          <th>Spell</th>
+          <th>Branch</th>
+          <th>Min</th>
+          <th>Diff</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each proposals as |proposal|}}
+          <tr>
+            <td><code>#{{proposal.job_id}}</code></td>
+            <td><small>{{proposal.proposed_by}}</small></td>
+            <td><strong>{{proposal.name}}</strong></td>
+            <td><small>{{proposal.branch}}</small></td>
+            <td><small>{{proposal.minimum_skill}}</small></td>
+            <td><small>{{proposal.difficulty}}</small></td>
+            <td><small class="text-muted">{{proposal.description}}</small></td>
+            <td>
+              <button class="btn btn-sm btn-success" {{action "approveProposal" proposal}} disabled={{isSubmitting}}>Approve</button>
+              <button class="btn btn-sm btn-danger" {{action "showRejectForm" proposal}} disabled={{isSubmitting}}>Reject</button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <p class="text-muted small">Pending: {{proposals.length}} proposal(s)</p>
+  {{else}}
+    <p class="text-muted">No pending proposals.</p>
+  {{/if}}
+</div>

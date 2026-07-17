@@ -11,6 +11,14 @@
     <li class="nav-item">
       <a class="nav-link" href="#propose" data-toggle="tab" role="tab">Propose Spell</a>
     </li>
+    {{#if isStaff}}
+      <li class="nav-item">
+        <a class="nav-link" href="#manage-spells" data-toggle="tab" role="tab">Manage Spells</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#manage-proposals" data-toggle="tab" role="tab">Manage Proposals</a>
+      </li>
+    {{/if}}
   </ul>
 
   <div class="tab-content">
@@ -60,5 +68,15 @@
     <div class="tab-pane" id="propose" role="tabpanel">
       {{grimoire-propose-spell branches=branches}}
     </div>
+
+    {{#if isStaff}}
+      <div class="tab-pane" id="manage-spells" role="tabpanel">
+        {{grimoire-manage-spells allSpells=allSpells branches=branches onRefresh=(action "refreshStaffSpells")}}
+      </div>
+
+      <div class="tab-pane" id="manage-proposals" role="tabpanel">
+        {{grimoire-manage-proposals proposals=proposals onRefresh=(action "refreshStaffProposals")}}
+      </div>
+    {{/if}}
   </div>
 </div>

@@ -22,6 +22,13 @@ require_relative 'web/grimoire_learned_request_handler'
 require_relative 'web/grimoire_learn_request_handler'
 require_relative 'web/grimoire_cast_request_handler'
 require_relative 'web/grimoire_propose_request_handler'
+require_relative 'web/grimoire_add_request_handler'
+require_relative 'web/grimoire_edit_request_handler'
+require_relative 'web/grimoire_delete_request_handler'
+require_relative 'web/grimoire_approve_request_handler'
+require_relative 'web/grimoire_reject_request_handler'
+require_relative 'web/grimoire_all_spells_request_handler'
+require_relative 'web/grimoire_proposals_request_handler'
 
 module AresMUSH
   module Grimoire
@@ -79,6 +86,20 @@ module AresMUSH
         return GrimoireCastRequestHandler
       when "grimoirePropose"
         return GrimoireProposalRequestHandler
+      when "grimoireAdd"
+        return GrimoireAddRequestHandler
+      when "grimoireEdit"
+        return GrimoireEditRequestHandler
+      when "grimoireDelete"
+        return GrimoireDeleteRequestHandler
+      when "grimoireApprove"
+        return GrimoireApproveRequestHandler
+      when "grimoireReject"
+        return GrimoireRejectRequestHandler
+      when "grimoireAllSpells"
+        return GrimoireAllSpellsRequestHandler
+      when "grimoireProposals"
+        return GrimoireProposalsRequestHandler
       end
       nil
     end
