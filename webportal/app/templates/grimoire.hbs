@@ -1,31 +1,52 @@
 <div class="container grimoire-page">
   <h2>Grimoire</h2>
 
-  <h3>Learned Spells</h3>
-  {{#each model.learned as |spell|}}
-    <div class="grimoire-spell">
-      <h4>{{spell.name}}</h4>
-      <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
-      {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
-    </div>
-  {{else}}
-    <p>You have not learned any spells.</p>
-  {{/each}}
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" href="#learned" data-toggle="tab" role="tab">Learned Spells</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#available" data-toggle="tab" role="tab">Available Spells</a>
+    </li>
+  </ul>
 
-  <h3>Available Spells</h3>
-  {{#each model.available as |spell|}}
-    <div class="grimoire-spell">
-      <h4>{{spell.name}}</h4>
-      <p>{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
-      {{#if spell.description}}<p class="text-muted">{{spell.description}}</p>{{/if}}
-      <p>Cost: {{spell.cost}} XP (You have {{spell.current_xp}} XP, Skill: {{spell.current_skill}})</p>
-      {{#if spell.can_learn}}
-        <button class="btn btn-primary" {{action "learn" spell}}>Learn ({{spell.cost}} XP)</button>
+  <div class="tab-content">
+    <div class="tab-pane active" id="learned" role="tabpanel">
+      {{#if model.learned.length}}
+        {{#each model.learned as |spell|}}
+          <div class="card grimoire-spell">
+            <div class="card-body">
+              <h5 class="card-title">{{spell.name}}</h5>
+              <p class="card-text text-muted">{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+              {{#if spell.description}}<p class="card-text">{{spell.description}}</p>{{/if}}
+            </div>
+          </div>
+        {{/each}}
       {{else}}
-        <p class="text-danger">Cannot learn: insufficient skill or XP.</p>
+        <p class="text-muted">You have not learned any spells yet.</p>
       {{/if}}
     </div>
-  {{else}}
-    <p>No spells available to learn.</p>
-  {{/each}}
+
+    <div class="tab-pane" id="available" role="tabpanel">
+      {{#if model.available.length}}
+        {{#each model.available as |spell|}}
+          <div class="card grimoire-spell">
+            <div class="card-body">
+              <h5 class="card-title">{{spell.name}}</h5>
+              <p class="card-text text-muted">{{spell.branch}} &mdash; Min Skill: {{spell.minimum_skill}} &mdash; Difficulty: {{spell.difficulty}}</p>
+              {{#if spell.description}}<p class="card-text">{{spell.description}}</p>{{/if}}
+              <p class="card-text"><small class="text-muted">Cost: {{spell.cost}} XP (You have {{spell.current_xp}} XP, Your skill: {{spell.current_skill}})</small></p>
+              {{#if spell.can_learn}}
+                <small class="text-success">You can learn this spell.</small>
+              {{else}}
+                <small class="text-danger">Cannot learn: insufficient skill or XP.</small>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-muted">No spells available to learn. You have learned everything!</p>
+      {{/if}}
+    </div>
+  </div>
 </div>

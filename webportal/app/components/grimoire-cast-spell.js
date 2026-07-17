@@ -8,6 +8,7 @@ export default Component.extend({
   spells: null,
   selectedSpell: null,
   loading: true,
+  loadingError: false,
   casting: false,
 
   init() {
@@ -22,10 +23,16 @@ export default Component.extend({
 
   loadSpells() {
     this.set('loading', true);
+    this.set('loadingError', false);
     this.get('gameApi').requestOne('grimoireSpells')
       .then((response) => {
         this.set('spells', response.spells || []);
         this.set('loading', false);
+      })
+      .catch((error) => {
+        this.set('loadingError', true);
+        this.set('loading', false);
+        this.get('flashMessages').danger('Failed to load spells. Please try again.');
       });
   },
 
@@ -49,7 +56,15 @@ export default Component.extend({
           this.get('flashMessages').success(response.message);
           this.set('selectedSpell', null);
         }
+      })
+      .catch((error) => {
+        this.set('casting', false);
+        this.get('flashMessages').danger('Failed to cast spell. Please try again.');
       });
+    },
+
+    retry() {
+      this.loadSpells();
     }
   }
 });

@@ -8,11 +8,11 @@ module AresMUSH
 
       # --- Queries ---
       def self.list_spells
-        Spell.all.to_a.sort_by { |s| s.name.downcase }
+        Spell.all.to_a.select { |s| s.approved }.sort_by { |s| s.name.downcase }
       end
 
       def self.list_by_branch(key)
-        Spell.find(branch_key: key.to_s).to_a.sort_by { |s| s.name.downcase }
+        Spell.find(branch_key: key.to_s).to_a.select { |s| s.approved }.sort_by { |s| s.name.downcase }
       end
 
       def self.find_spell(id)
@@ -155,6 +155,12 @@ module AresMUSH
         errors = []
         errors << "Branch is not valid" unless Grimoire.branches.key?(attrs[:branch_key].to_s)
         errors << "Name is required" if attrs[:name].to_s.strip.empty?
+
+        min_skill = attrs[:minimum_skill].to_i
+        difficulty = attrs[:difficulty].to_i
+        errors << "Minimum skill must be 0 or higher" if min_skill < 0
+        errors << "Difficulty must be 0 or higher" if difficulty < 0
+
         unless attrs[:name].to_s.strip.empty? || attrs[:branch_key].to_s.empty?
           existing = Spell.find(branch_key: attrs[:branch_key].to_s, name: attrs[:name]).to_a
           existing = existing.reject { |s| s.id == exclude_id } if exclude_id

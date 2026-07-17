@@ -161,23 +161,56 @@ The roll uses the branch skill as the primary ability, with the Magic ability ra
 The web portal integration includes:
 - A Grimoire page at `/grimoire` showing learned and available spells
 - A Cast Spell component for scene play menus
-- A Learn Spell component
+- A Learn Spell component for spell learning
 
-### Adding the Grimoire Route
+### Required Setup
 
-Add this to your `ares-webportal/app/custom-routes.js`:
+1. **Add the Grimoire route** to your `ares-webportal/app/custom-routes.js`:
 
 ```javascript
 router.route('grimoire');
 ```
 
-### Adding Cast Spell to the Scene Play Menu
+2. **(Optional) Add Cast Spell to the Scene Play Menu** - Edit your `ares-webportal/app/templates/components/scene-play-menu.hbs` and add a menu item that opens the `grimoire-cast-spell` component in a modal:
 
-To add a "Cast Spell" button to the scene play menu, edit your `ares-webportal/app/templates/components/scene-play-menu.hbs` and add a menu item that opens the `grimoire-cast-spell` component in a modal. Pass the current scene ID as `sceneId` so the cast result is added to the scene.
+```handlebars
+<button class="btn btn-sm btn-info" {{action "openModal" "grimoire-cast-spell" sceneId=model.id}}>
+  Cast Spell
+</button>
+```
+
+Then in your scene-play-menu.js component, handle the modal opening.
+
+3. **(Optional) Add Learn Spell modal** - Similarly, you can add a Learn Spell button that opens the `grimoire-learn-spell` component in a modal.
+
+### Web Portal Features
+
+**Grimoire Page** (`/grimoire`)
+- Lists learned spells in one tab
+- Lists available spells in another tab
+- Shows spell details: branch, minimum skill, difficulty, description
+- Shows XP costs and current skill ratings for available spells
+- Indicates which spells can be learned and which are locked
+
+**Cast Spell Component** (`grimoire-cast-spell`)
+- Shows all learned (castable) spells
+- Allows selecting a spell and casting it
+- Automatically adds cast result to a scene if sceneId is provided
+- Handles errors and shows loading states
+
+**Learn Spell Component** (`grimoire-learn-spell`)
+- Shows all available spells
+- Displays XP costs and skill requirements
+- Allows learning spells (costs XP)
+- Refreshes after successful learning
+
+### Web Portal API
 
 The web portal components use the AresMUSH GameApi service with these request commands:
 - `grimoirePage` - Fetch learned and available spells for the Grimoire page
 - `grimoireSpells` - Fetch castable (learned) spells
+- `grimoireAvailable` - Fetch available spells to learn
+- `grimoireLearned` - Fetch learned spells
 - `grimoireLearn` - Learn a spell (args: spell_id)
 - `grimoireCast` - Cast a spell (args: spell_id, scene_id)
 

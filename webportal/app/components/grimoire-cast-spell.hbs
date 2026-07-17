@@ -1,6 +1,11 @@
 <div class="grimoire-cast-spell">
   {{#if loading}}
     <p>Loading spells...</p>
+  {{else if loadingError}}
+    <div class="alert alert-danger">
+      <p>Failed to load spells. Please try again.</p>
+      <button class="btn btn-sm btn-secondary" {{action "retry"}}>Retry</button>
+    </div>
   {{else if spells.length}}
     <div class="list-group">
       {{#each spells as |spell|}}

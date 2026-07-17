@@ -7,9 +7,23 @@
 
 The Grimoire is the repository of all known spells. You can browse spells, learn them, cast them, and propose new ones.
 
-+grimoire - Lists all spells grouped by branch. Spells you have learned are tagged as Learned, spells you have the skill for are Available, and spells you lack the skill for are Locked.
+BROWSING SPELLS
++grimoire - Lists all approved spells grouped by branch. Spells you have learned are tagged as Learned, spells you have the skill for are Available, and spells you lack the skill for are Locked.
 +grimoire <branch> - Lists spells in a specific branch.
 +grimoire <spell id> - Shows details for a specific spell.
-+grimoire/learn <spell id> - Learns a spell. You must meet the minimum skill requirement and have enough XP. The XP cost is based on the spell's minimum skill rating.
-+grimoire/cast <spell id> - Casts a spell you have learned. The system rolls your branch skill plus your Magic ability rating minus the spell difficulty using the FS3 rolling system.
-+grimoire/propose <branch>=<name>/<min skill>/<difficulty>/<description> - Proposes a new spell to staff via the Jobs system. Staff will approve or reject the proposal.
+
+LEARNING SPELLS
++grimoire/learn <spell id> - Learns a spell. Requirements:
+  - You must meet the spell's minimum skill requirement in its branch
+  - You must have enough XP (cost = minimum skill × configured XP cost per point)
+  - You cannot learn a spell you've already learned
+
+CASTING SPELLS
++grimoire/cast <spell id> - Casts a spell you have learned. The system:
+  1. Rolls your branch skill
+  2. Adds your Magic ability rating as a bonus
+  3. Subtracts the spell difficulty as a penalty
+  4. Uses the FS3 rolling system to determine success
+
+PROPOSING SPELLS
++grimoire/propose <branch>=<name>/<min skill>/<difficulty>/<description> - Proposes a new spell to staff via the Jobs system. Staff will review, approve or reject your proposal. The spell becomes available to all players once approved.

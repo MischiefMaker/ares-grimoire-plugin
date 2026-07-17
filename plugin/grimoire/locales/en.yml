@@ -52,3 +52,5 @@ en:
     insufficient_xp: "You need %{cost} XP to learn %{name}. (Current: %{current})"
     spell_learned: "You have learned %{name} for %{cost} XP."
     not_learned: "You have not learned this spell."
+    invalid_minimum_skill: "Minimum skill must be 0 or higher."
+    invalid_difficulty: "Difficulty must be 0 or higher."
