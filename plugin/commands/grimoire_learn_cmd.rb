@@ -16,7 +16,7 @@ module AresMUSH
       end
 
       def handle
-        result = GrimoireService.learn_spell(enactor, self.spell_id)
+        result = GrimoireApi.learn_spell(enactor, self.spell_id)
         if result[:success]
           client.emit_success result[:message]
         else

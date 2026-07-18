@@ -16,13 +16,13 @@ module AresMUSH
       end
 
       def handle
-        spell = GrimoireService.find_spell(self.spell_id)
+        spell = GrimoireApi.find_spell(self.spell_id)
         unless spell
           client.emit_failure t('grimoire.spell_not_found', id: self.spell_id)
           return
         end
         show_details = Global.read_config('grimoire', 'casting', 'show_roll_details')
-        result = GrimoireService.cast_spell(enactor, spell, show_details: show_details)
+        result = GrimoireApi.cast_spell(enactor, spell, show_details: show_details)
         if result[:success]
           # Emit to room and log to scene, following the FS3 emit_results pattern
           enactor_room.emit result[:message]

@@ -54,3 +54,5 @@ en:
     not_learned: "You have not learned this spell."
     invalid_minimum_skill: "Minimum skill must be 0 or higher."
     invalid_difficulty: "Difficulty must be 0 or higher."
+    invalid_branch: "Branch '%{branch}' is not properly configured."
+    magic_ability_missing: "The Magic ability is not configured or you do not have access to it."

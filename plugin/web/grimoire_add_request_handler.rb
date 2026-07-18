@@ -10,13 +10,13 @@ module AresMUSH
         return error if error
 
         # Check staff permission
-        unless GrimoireService.can_manage?(enactor)
+        unless GrimoireApi.can_manage?(enactor)
           return { error: "Insufficient permissions to manage spells." }
         end
 
         request.log_request
 
-        result = GrimoireService.create_spell(
+        result = GrimoireApi.create_spell(
           branch_key: request.args['branch_key'],
           name: request.args['name'],
           description: request.args['description'],
@@ -27,7 +27,7 @@ module AresMUSH
         )
 
         if result[:success]
-          { success: true, spell: GrimoireService.spell_json(result[:spell]) }
+          { success: true, spell: GrimoireApi.spell_json(result[:spell]) }
         else
           { error: result[:errors].join(', ') }
         end

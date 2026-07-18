@@ -161,12 +161,12 @@ export default Component.extend({
       this.get('flashMessages').danger('Please enter a spell name.');
       return false;
     }
-    if (isNaN(parseInt(minSkill)) || parseInt(minSkill) < 0) {
-      this.get('flashMessages').danger('Minimum skill must be a non-negative number.');
+    if (isNaN(parseInt(minSkill))) {
+      this.get('flashMessages').danger('Minimum skill must be a number.');
       return false;
     }
-    if (isNaN(parseInt(difficulty)) || parseInt(difficulty) < 0) {
-      this.get('flashMessages').danger('Difficulty must be a non-negative number.');
+    if (isNaN(parseInt(difficulty))) {
+      this.get('flashMessages').danger('Difficulty must be a number.');
       return false;
     }
     if (!description || description.trim() === '') {

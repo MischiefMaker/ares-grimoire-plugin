@@ -13,11 +13,11 @@ module AresMUSH
 
         spell_id = request.args['spell_id']
         scene_id = request.args['scene_id']
-        spell = GrimoireService.find_spell(spell_id.to_i)
+        spell = GrimoireApi.find_spell(spell_id.to_i)
         return { error: t('grimoire.spell_not_found', id: spell_id) } unless spell
 
         show_details = Global.read_config('grimoire', 'casting', 'show_roll_details')
-        result = GrimoireService.cast_spell(enactor, spell,
+        result = GrimoireApi.cast_spell(enactor, spell,
           scene_id: scene_id,
           show_details: show_details)
         result[:success] ? { success: true, message: result[:message] } : { error: result[:message] }

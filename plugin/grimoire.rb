@@ -5,7 +5,7 @@ $:.unshift File.dirname(__FILE__)
 require_relative 'models/spell'
 require_relative 'models/spell_proposal'
 require_relative 'models/character_spell_learned'
-require_relative 'services/grimoire_service'
+require_relative 'public/grimoire_api'
 require_relative 'commands/grimoire_list_cmd'
 require_relative 'commands/grimoire_learn_cmd'
 require_relative 'commands/grimoire_cast_cmd'

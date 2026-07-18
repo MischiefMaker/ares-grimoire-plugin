@@ -10,7 +10,7 @@ module AresMUSH
         return error if error
 
         # Check staff permission
-        unless GrimoireService.can_manage?(enactor)
+        unless GrimoireApi.can_manage?(enactor)
           return { error: "Insufficient permissions." }
         end
 
@@ -21,7 +21,7 @@ module AresMUSH
 
         {
           spells: spells.map { |s|
-            GrimoireService.spell_json(s).merge(
+            GrimoireApi.spell_json(s).merge(
               approved: s.approved
             )
           }

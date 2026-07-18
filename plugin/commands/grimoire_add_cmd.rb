@@ -23,12 +23,12 @@ module AresMUSH
       end
 
       def check_can_manage
-        return t('grimoire.staff_only') unless GrimoireService.can_manage?(enactor)
+        return t('grimoire.staff_only') unless GrimoireApi.can_manage?(enactor)
         nil
       end
 
       def handle
-        result = GrimoireService.create_spell(
+        result = GrimoireApi.create_spell(
           branch_key: self.branch,
           name: self.name,
           description: self.description,
