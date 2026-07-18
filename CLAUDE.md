@@ -1,63 +1,63 @@
-# Claude Code Project Instructions
+# CLAUDE.md
 
-## Git Workflow Requirement
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-After completing any code, documentation, configuration, or repository changes, **always commit the changes and push them to the configured GitHub remote** unless explicitly told not to.
+## What this is
 
-**Do not leave completed work only in the local checkout.**
+Grimoire is a plugin for [AresMUSH](https://aresmush.com), a Ruby MUSH game server framework. This repo is not a standalone app — it's installed into a running AresMUSH game (`plugins/grimoire/`) and its web portal (`ares-webportal/`). There is no local build, test, or lint tooling in this repo (no Gemfile, Rakefile, or test suite); AresMUSH core provides the runtime, ORM (Ohm), FS3 skill system, job system, and web request framework that this plugin's code depends on.
 
-### Workflow for Every Task
+Because there's no local way to run or test this code, changes should be verified by careful reading and cross-referencing against how AresMUSH core APIs are used elsewhere in this plugin (e.g. `FS3Skills`, `Jobs`, `Global.read_config`, `Website.check_login`, `ObjectModel`/`Ohm::Model`) rather than by executing anything.
 
-Before finishing any task, follow these steps:
+## Architecture
 
-1. **Check status**: Run `git status`
-2. **Review changes**: Look at the changed files to ensure they're appropriate
-3. **Create commit**: Write an appropriate commit message describing the changes
-4. **Commit locally**: `git commit -m "message"`
-5. **Push to remote**: Push to the current branch
-6. **Report**: Report the commit hash and push status
+### Three-tier structure, one entry point
 
-### Error Handling
+`plugin/grimoire.rb` is the plugin's registration point — it requires every file and wires up two dispatch tables:
+- `get_cmd_handler` maps `+grimoire/<switch>` command switches to command classes in `plugin/commands/`
+- `get_web_request_handler` maps web API request names (e.g. `"grimoireAdd"`) to handler classes in `plugin/web/`
 
-- If push fails, clearly report the reason and the error message
-- Do not claim the task is complete if push was unsuccessful
-- Investigate and fix the cause before considering work done
+Both MUSH commands and web handlers are thin wrappers that call into `plugin/services/grimoire_service.rb` — **all business logic (validation, permission checks, XP/skill math, spell CRUD, proposal workflow) lives in `GrimoireService`**. When adding a new operation, add it to the service first, then add a command and/or web handler that calls it. Never duplicate validation or game-state logic in a command or handler.
 
-### Example Flow
+### Branch configuration: ID vs. display name vs. skill
 
-```bash
-$ git status
-On branch main
-Changes not staged for commit:
-  modified:   plugin/services/grimoire_service.rb
-  new file:   plugin/web/new_handler.rb
+Magic "branches" (schools of magic) have a three-level separation that must be preserved:
 
-$ git add -A
-$ git commit -m "Fix spell validation in service layer"
-[main a1b2c3d] Fix spell validation in service layer
- 2 files changed, 15 insertions(+), 3 deletions(-)
+- **Branch key** (`spell.branch_key`, e.g. `"ceremonial"`) — stable identifier stored in the DB, referenced in code/args. Never changes.
+- **Branch display name** (`grimoire.yml` → `branches.<key>.name`) — user-facing text, editable anytime with no data migration.
+- **Branch skill** (`grimoire.yml` → `branches.<key>.skill`) — the FS3 skill name used for rolls, also editable anytime.
 
-$ git push origin main
-Counting objects: 3, done.
-Total 3 (delta 2), reused 0 (delta 0)
-To github.com:user/ares-grimoire-plugin.git
-   a1b2c3d..1e2f3g4 main -> main
+Always go through the helpers in `plugin/grimoire.rb` (`Grimoire.branches`, `Grimoire.branch_display_name`, `Grimoire.branch_skill`, `Grimoire.resolve_branch`) rather than reading `Global.read_config('grimoire', ...)` directly elsewhere — those two methods are the only places YAML config should be parsed for branches.
 
-✓ Pushed commit a1b2c3d to origin/main
-```
+### Config-driven, not code-driven
 
-### Why This Matters
+`game/config/grimoire.yml` controls branches, staff permission name (`permissions.manage`, checked via `GrimoireService.can_manage?`), XP cost per skill point, proposal job category, and whether roll details are shown on cast. Adding a branch or renaming one is a YAML-only change — don't hardcode branch lists in Ruby or in the Ember webportal (`webportal/app/routes/grimoire.js` fetches branches from the `grimoireBranches` endpoint rather than hardcoding them, and any new UI should follow that pattern).
 
-- **Source of truth in GitHub**: The repository is authoritative, not the local checkout
-- **Collaboration**: Other contributors see completed work immediately
-- **Safety**: Remote backups prevent data loss
-- **Clear status**: Everyone knows what's been done and committed
-- **Auditability**: Git history shows what changed and when
+### System-agnostic naming
 
-### Exceptions
+`minimum_skill` and `difficulty` on `Spell`/`SpellProposal` are generic integers — their FS3-specific meaning (skill rating thresholds, roll penalties) is confined to `GrimoireService`. UI labels and web JSON should stay generic ("Minimum Skill", not "FS3 Skill Rating") so the plugin can support non-FS3 systems (SOUL, custom) later without a data model change. See `PHASE_2B_ARCHITECTURE_NOTES.md` for the specific FS3 coupling points (`GrimoireService::MAGIC_ABILITY`, `fs3_rating`, `fs3_xp`) that would need a `MagicRollAdapter`-style abstraction if a second system is ever added — this is documented, not implemented.
 
-Push directly only when explicitly told not to. Otherwise, always push after committing.
+### Proposal workflow rides on the Jobs system
 
----
+Player-submitted spells (`GrimoireService.create_proposal`) create an AresMUSH `Job` plus a local `SpellProposal` record (job_id, branch_key, name, description, minimum_skill, difficulty). Approval (`approve_proposal`) creates the real `Spell` via `create_spell` and closes the job; rejection just closes the job with a reason. `SpellProposal` rows are deleted once resolved either way — they're a staging area, not permanent history.
 
-**Permanent instruction for all Claude Code sessions on this repository.**
+### Web handlers
+
+Every handler in `plugin/web/` follows the same shape: `Website.check_login(request)`, then a `GrimoireService.can_manage?` permission check for staff-only endpoints, then `request.log_request`, then delegate to `GrimoireService` and return `{ success:, spell: }`/`{ error: }`-shaped hashes (using `GrimoireService.spell_json` for spell serialization). Match this shape for new handlers.
+
+### Ember webportal
+
+`webportal/app/` is a set of files meant to be copied into a separate `ares-webportal` checkout (see README "Installation" for the exact file mapping) — it is not built or run from this repo. It's plain Ember (no React). `routes/grimoire.js` fetches branches and staff-only data server-side; components (`grimoire-learn-spell`, `grimoire-cast-spell`, `grimoire-propose-spell`, `grimoire-manage-spells`, `grimoire-manage-proposals`) each pair a `.js` component with a `.hbs` template.
+
+### Localization
+
+All user-facing strings go through `t('grimoire.<key>', ...)` with definitions in `plugin/locales/en.yml` — don't inline strings in commands/services/handlers.
+
+## Reference docs in this repo
+
+- `README.md` — end-user/installer facing docs: installation, configuration, command reference, FS3 requirements.
+- `PHASE_2B_ARCHITECTURE_NOTES.md` / `BRANCH_CONFIGURATION_VERIFICATION.md` — design rationale for the branch ID/name/skill separation and notes on what a future multi-system (SOUL/custom) refactor would require. Read these before changing branch config handling or FS3 coupling.
+- `HANDOFF.md` — snapshot of in-progress work state from a prior session; useful for picking up context but not authoritative about current repo state — verify against actual code/git history first.
+
+## Git workflow
+
+Always commit and push completed work to the current branch on the GitHub remote unless explicitly told not to. Don't leave finished changes only in the local checkout.
