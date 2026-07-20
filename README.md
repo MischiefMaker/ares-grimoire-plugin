@@ -51,7 +51,7 @@ plugin/install https://github.com/MischiefMaker/ares-grimoire-plugin
 
 This installs the plugin code to `plugins/grimoire/` and creates `game/config/grimoire.yml`.
 
-Restart your game: `@restart`
+Restart your game server: `sudo reboot`
 
 ### Step 2: Install Web Portal Components
 

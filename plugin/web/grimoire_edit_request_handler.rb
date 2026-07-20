@@ -11,7 +11,7 @@ module AresMUSH
 
         # Check staff permission
         unless GrimoireApi.can_manage?(enactor)
-          return { error: "Insufficient permissions to manage spells." }
+          return { error: t('grimoire.staff_only') }
         end
 
         request.log_request

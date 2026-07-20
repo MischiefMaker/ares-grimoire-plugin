@@ -121,6 +121,9 @@ module AresMUSH
       # --- Casting ---
       def self.cast_spell(char, spell, opts = {})
         return { success: false, message: t('grimoire.spell_not_approved') } unless spell.approved
+        unless char.is_approved?
+          return { success: false, message: t('grimoire.not_approved') }
+        end
         unless has_learned_spell?(char, spell.id)
           return { success: false, message: t('grimoire.not_learned') }
         end

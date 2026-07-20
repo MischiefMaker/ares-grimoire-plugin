@@ -10,6 +10,7 @@ en:
     branch_not_found: "No branch named '%{branch}'."
     spell_not_found: "No spell found with id %{id}."
     spell_not_approved: "That spell is not approved for casting."
+    not_approved: "Your character must be approved to cast spells."
     cast_announce: "%{caster} casts %{spell} (%{branch}). %{status}"
     success: "Success"
     failure: "Failure"
