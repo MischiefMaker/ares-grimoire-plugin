@@ -12,7 +12,7 @@ module AresMUSH
         request.log_request
 
         spell_id = request.args['spell_id']
-        result = GrimoireService.learn_spell(enactor, spell_id.to_i)
+        result = GrimoireApi.learn_spell(enactor, spell_id.to_i)
         result[:success] ? { success: true, message: result[:message] } : { error: result[:message] }
       end
     end

@@ -52,17 +52,17 @@ export default Component.extend({
         return;
       }
 
-      // Validate numeric fields
+      // Validate numeric fields are parseable (server validates business rules)
       let minSkillNum = parseInt(minSkill);
       let difficultyNum = parseInt(difficulty);
 
-      if (isNaN(minSkillNum) || minSkillNum < 0) {
-        this.get('flashMessages').danger('Minimum skill must be a non-negative number.');
+      if (isNaN(minSkillNum)) {
+        this.get('flashMessages').danger('Minimum skill must be a number.');
         return;
       }
 
-      if (isNaN(difficultyNum) || difficultyNum < 0) {
-        this.get('flashMessages').danger('Difficulty must be a non-negative number.');
+      if (isNaN(difficultyNum)) {
+        this.get('flashMessages').danger('Difficulty must be a number.');
         return;
       }
 

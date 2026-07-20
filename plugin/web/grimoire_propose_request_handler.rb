@@ -23,7 +23,7 @@ module AresMUSH
         end
 
         # Call service method (same as MUSH command)
-        job = GrimoireService.create_proposal(enactor, {
+        job = GrimoireApi.create_proposal(enactor, {
           branch_key: branch_key,
           name: name,
           minimum_skill: minimum_skill,

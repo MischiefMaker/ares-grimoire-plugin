@@ -10,13 +10,13 @@ module AresMUSH
         return error if error
 
         # Check staff permission
-        unless GrimoireService.can_manage?(enactor)
-          return { error: "Insufficient permissions to manage proposals." }
+        unless GrimoireApi.can_manage?(enactor)
+          return { error: t('grimoire.staff_only') }
         end
 
         request.log_request
 
-        result = GrimoireService.reject_proposal(enactor, request.args['job_id'], request.args['reason'])
+        result = GrimoireApi.reject_proposal(enactor, request.args['job_id'], request.args['reason'])
 
         if result[:success]
           { success: true, message: result[:message] }

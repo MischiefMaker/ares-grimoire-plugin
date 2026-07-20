@@ -16,12 +16,12 @@ module AresMUSH
       end
 
       def check_can_manage
-        return t('grimoire.staff_only') unless GrimoireService.can_manage?(enactor)
+        return t('grimoire.staff_only') unless GrimoireApi.can_manage?(enactor)
         nil
       end
 
       def handle
-        result = GrimoireService.approve_proposal(enactor, self.job_id)
+        result = GrimoireApi.approve_proposal(enactor, self.job_id)
         if result[:success]
           client.emit_success result[:message]
         else

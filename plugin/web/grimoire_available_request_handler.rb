@@ -11,12 +11,12 @@ module AresMUSH
 
         request.log_request
 
-        { spells: GrimoireService.available_spells(enactor).map do |s|
-            GrimoireService.spell_json(s).merge(
-              can_learn: GrimoireService.can_learn_spell?(enactor, s),
-              cost: GrimoireService.calculate_learning_cost(s),
-              current_xp: GrimoireService.fs3_xp(enactor),
-              current_skill: GrimoireService.fs3_rating(enactor, Grimoire.branch_skill(s.branch_key))
+        { spells: GrimoireApi.available_spells(enactor).map do |s|
+            GrimoireApi.spell_json(s).merge(
+              can_learn: GrimoireApi.can_learn_spell?(enactor, s),
+              cost: GrimoireApi.calculate_learning_cost(s),
+              current_xp: GrimoireApi.fs3_xp(enactor),
+              current_skill: GrimoireApi.fs3_rating(enactor, Grimoire.branch_skill(s.branch_key))
             )
           end }
       end

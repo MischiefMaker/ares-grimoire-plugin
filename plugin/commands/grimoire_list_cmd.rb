@@ -18,7 +18,7 @@ module AresMUSH
       def list_all
         msg = "%xh%xc#{t('grimoire.title')}%xn\n%xh#{'-' * 40}%xn\n"
 
-        known = GrimoireService.learned_spells(enactor)
+        known = GrimoireApi.learned_spells(enactor)
         known_ids = build_id_lookup(known.map(&:id))
 
         msg += "%xh#{t('grimoire.learned_spells')}%xn\n"
@@ -30,13 +30,13 @@ module AresMUSH
 
         msg += "\n%xh#{t('grimoire.available_spells')}%xn\n"
         branches = Grimoire.branches
-        spells = GrimoireService.list_spells
+        spells = GrimoireApi.list_spells
         by_branch = spells.group_by { |s| s.branch_key.to_s }
 
         branch_ratings = {}
         branches.each_key do |key|
           skill = Grimoire.branch_skill(key)
-          branch_ratings[key] = GrimoireService.fs3_rating(enactor, skill)
+          branch_ratings[key] = GrimoireApi.fs3_rating(enactor, skill)
         end
 
         branches.each do |key, info|
@@ -78,7 +78,7 @@ module AresMUSH
           return
         end
         name = Grimoire.branch_display_name(key)
-        spells = GrimoireService.list_by_branch(key)
+        spells = GrimoireApi.list_by_branch(key)
         msg = "%xh%xc#{name}%xn (#{key})\n%xh#{'-' * 40}%xn\n"
         if spells.empty?
           msg += t('grimoire.no_spells')
@@ -89,13 +89,13 @@ module AresMUSH
       end
 
       def show_spell(id)
-        spell = GrimoireService.find_spell(id)
+        spell = GrimoireApi.find_spell(id)
         unless spell
           client.emit_failure t('grimoire.spell_not_found', id: id)
           return
         end
         branch = Grimoire.branch_display_name(spell.branch_key)
-        learned = GrimoireService.has_learned_spell?(enactor, spell.id)
+        learned = GrimoireApi.has_learned_spell?(enactor, spell.id)
         msg = "%xh%xc#{spell.name}%xn\n%xh#{'-' * 40}%xn\n"
         msg += "#{t('grimoire.branch_label')}: #{branch} (#{spell.branch_key})\n"
         msg += "#{t('grimoire.min')}: #{spell.minimum_skill}\n"

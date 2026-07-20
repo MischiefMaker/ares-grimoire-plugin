@@ -23,12 +23,12 @@ module AresMUSH
       end
 
       def check_can_manage
-        return t('grimoire.staff_only') unless GrimoireService.can_manage?(enactor)
+        return t('grimoire.staff_only') unless GrimoireApi.can_manage?(enactor)
         nil
       end
 
       def handle
-        result = GrimoireService.edit_spell(self.spell_id, {
+        result = GrimoireApi.edit_spell(self.spell_id, {
           name: self.name,
           description: self.description,
           minimum_skill: self.minimum_skill,

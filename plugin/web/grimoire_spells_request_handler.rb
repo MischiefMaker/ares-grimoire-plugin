@@ -11,7 +11,7 @@ module AresMUSH
 
         request.log_request
 
-        { spells: GrimoireService.castable_spells(enactor).map { |s| GrimoireService.spell_json(s) } }
+        { spells: GrimoireApi.castable_spells(enactor).map { |s| GrimoireApi.spell_json(s) } }
       end
     end
   end

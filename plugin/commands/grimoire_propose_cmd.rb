@@ -27,7 +27,7 @@ module AresMUSH
           client.emit_failure t('grimoire.branch_not_found', branch: self.branch)
           return
         end
-        job = GrimoireService.create_proposal(enactor, {
+        job = GrimoireApi.create_proposal(enactor, {
           branch_key: self.branch,
           name: self.name,
           minimum_skill: self.minimum_skill,
